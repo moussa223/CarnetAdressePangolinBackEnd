@@ -47,17 +47,13 @@ router.post('/AddPangolin', function(req, res) {
         });
     });
 });
-// Mettre à jour un pangolin
-router.put('/pangolin/:id', function(req, res) {
-    Pangolin.findById(req.params.id, function(err, pangolin) {
+// Mettre à jour un pangolin en utilisant son login
+router.put('/Updatepangolin/:login', function(req, res) {
+    Pangolin.findOne({login:req.params.login}, function(err, pangolin) {
         if (err) {
             res.send(err);
         }
-        pangolin.name = req.body.name;
         pangolin.role = req.body.role;
-        pangolin.ami = req.body.ami;
-        pangolin.login = req.body.login;
-        pangolin.password = req.body.password;
         pangolin.save(function(err) {
             if (err) {
                 res.send(err);
@@ -100,9 +96,11 @@ router.post('/login',(req,res,next) =>{
 
                 // Les mots de passe sont corrects, connectez l'utilisateur
                 console.log('Authentification réussie');
+                let role = pangolin.role
+                let login = pangolin.login
                 let payload = {subject: pangolin._id}
                 let token = jwt.sign(payload,'CleSecrete')
-                res.status(200).send({token})// on envoie le token de connexion
+                res.status(200).send({token,role,login})// on envoie le token de connexion
                 //return res.status(200).send(pangolin);//on envoie le contenu du pangolin qui s'est connecté
 
             }

@@ -38,9 +38,13 @@ app.use('/pangolin',routes);
 app.post('/AddPangolin/',routes.post('/AddPangolin'));
 app.use('AddPangolin',routes);
 
-
+// appel de la route login
 app.post('/login/',routes.post('/login'));
 app.use('login',routes);
+
+app.put('/Updatepangolin/:login/',routes.put('/Updatepangolin/:login'));
+app.use('Updatepangolin/:login',routes)
+
 
 
 /*passport.serializeUser((pangolin, done) => {
