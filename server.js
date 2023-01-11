@@ -42,8 +42,14 @@ app.use('AddPangolin',routes);
 app.post('/login/',routes.post('/login'));
 app.use('login',routes);
 
+//modifier le pangolin en se servant de son login, on pouvait aussi utiliser son id
 app.put('/Updatepangolin/:login/',routes.put('/Updatepangolin/:login'));
 app.use('Updatepangolin/:login',routes)
+
+app.put('/addfriend/:login/:amiLogin/',routes.put('/addfriend/:login/:amiLogin'));
+app.use('addfriend/:login/:amiLogin',routes)
+
+
 
 
 

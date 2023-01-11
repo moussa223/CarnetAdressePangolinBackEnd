@@ -62,6 +62,34 @@ router.put('/Updatepangolin/:login', function(req, res) {
         });
     });
 });
+
+//Ajouter un ami dans la liste d'ami du pangolin
+router.put('/addfriend/:login/:amiLogin', function(req, res) {
+    // Trouvez le pangolin courant et ajoutez l'ami à sa liste d'amis
+    Pangolin.findOneAndUpdate(
+        {login:req.params.login},
+        { $addToSet: { ami: req.params.amiLogin } },
+        {new:true},
+        function(err, pangolin) {
+            if (err) {
+                res.send(err);
+            }
+            // Trouvez le pangolin ami et ajoutez le pangolin courant à sa liste d'amis
+            Pangolin.findOneAndUpdate(
+                {login: req.params.amilogin},
+                { $addToSet: { ami: req.params.login } },
+                {new:true},
+                function(err, pangolin) {
+                    if (err) {
+                        res.send(err);
+                    }
+                    res.json({ message: 'Ami ajouté !' });
+                }
+            );
+        }
+    );
+});
+
 // Supprimé un pangolin
 router.delete('/pangolin/:id', function(req, res) {
     Pangolin.remove({ _id: req.params.id }, function(err, pangolin) {

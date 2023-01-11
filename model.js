@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const PangolinSchema = new mongoose.Schema({
     name: { type: String, default: null },
     role: { type: String, default: null },
-    ami: { type: String, default: null },
+    ami: [{type: String, default:null}],
     login: { type: String, default: null },
     password: { type: String, default: null }
 })
