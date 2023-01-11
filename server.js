@@ -11,9 +11,6 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt')
 const session = require('express-session');
 
-
-
-
 // on utilise cors pour nous permettre de requetter l api depuis le front Important
 app.use(cors());
 
@@ -46,13 +43,16 @@ app.use('login',routes);
 app.put('/Updatepangolin/:login/',routes.put('/Updatepangolin/:login'));
 app.use('Updatepangolin/:login',routes)
 
+//ajout un ami dans la liste des amis de l'utilisateur courant en utilisant le login
 app.put('/addfriend/:login/:amiLogin/',routes.put('/addfriend/:login/:amiLogin'));
 app.use('addfriend/:login/:amiLogin',routes)
 
+//suppression d'un ami dans la liste d'ami de l'utilisateur
+app.delete('/Deletefriend/:login/:amiLogin/',routes.delete('/Deletefriend/:login/:amiLogin'));
+app.use('Deletefriend/:login/:amiLogin',routes)
 
 
-
-
+//test de passport
 /*passport.serializeUser((pangolin, done) => {
     // Serialize the user's ID into the session store
     done(null, pangolin.id);

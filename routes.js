@@ -90,6 +90,33 @@ router.put('/addfriend/:login/:amiLogin', function(req, res) {
     );
 });
 
+// supprimer un pangolin dans la liste d'ami du pangolin connecté
+router.delete('/Deletefriend/:login/:amiLogin', function(req, res) {
+    // Trouvez le pangolin courant et ajoutez l'ami à sa liste d'amis
+    Pangolin.findOneAndUpdate(
+        {login:req.params.login},
+        { $pull: { ami: req.params.amiLogin } },
+        {new:true},
+        function(err, pangolin) {
+            if (err) {
+                res.send(err);
+            }
+            // Trouvez le pangolin ami et ajoutez le pangolin courant à sa liste d'amis
+            Pangolin.findOneAndUpdate(
+                {login: req.params.amilogin},
+                { $pull: { ami: req.params.login } },
+                {new:true},
+                function(err, pangolin) {
+                    if (err) {
+                        res.send(err);
+                    }
+                    res.json({ message: 'Ami supprimé !' });
+                }
+            );
+        }
+    );
+});
+
 // Supprimé un pangolin
 router.delete('/pangolin/:id', function(req, res) {
     Pangolin.remove({ _id: req.params.id }, function(err, pangolin) {
@@ -126,11 +153,14 @@ router.post('/login',(req,res,next) =>{
                 console.log('Authentification réussie');
                 let role = pangolin.role
                 let login = pangolin.login
+                let ami = pangolin.ami
                 let payload = {subject: pangolin._id}
                 let token = jwt.sign(payload,'CleSecrete')
-                res.status(200).send({token,role,login})// on envoie le token de connexion
+                res.status(200).send({token,role,login,ami})// on envoie le token de connexion
                 //return res.status(200).send(pangolin);//on envoie le contenu du pangolin qui s'est connecté
-
+                console.log(typeof(token))
+                console.log(typeof(ami))
+                console.log(Object.values(ami))
             }
 
         });
